@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 
 namespace ZoomFake_TCP_
 {
@@ -18,7 +17,6 @@ namespace ZoomFake_TCP_
 
         ~FramePieceInfo()
         {
-            Debug.WriteLine("GC");
             FrameBytes = null;
         }
     }

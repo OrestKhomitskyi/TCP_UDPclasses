@@ -136,7 +136,7 @@ namespace ZoomFake_TCP_
             }
             else
             {
-                ShareWebCam.Content = "Share";
+                ShareWebCam.Content = "Share WebCam";
                 ReceiveWebCam.IsEnabled = true;
             }
         }
@@ -173,7 +173,7 @@ namespace ZoomFake_TCP_
             }
             else
             {
-                ShareScreen.Content = "Share";
+                ShareScreen.Content = "Share Screen";
                 ReceiveScreen.IsEnabled = true;
             }
         }

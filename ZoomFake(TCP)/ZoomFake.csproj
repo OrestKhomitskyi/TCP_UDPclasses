@@ -72,20 +72,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="FileChat.cs" />
-    <Compile Include="FilePiece.cs" />
-    <Compile Include="FileSendMessageInfo.cs" />
-    <Compile Include="FramePieceInfo.cs" />
-    <Compile Include="GroupChat.cs" />
-    <Compile Include="GroupMulticast.cs" />
-    <Compile Include="Message.cs" />
-    <Compile Include="ScreenCast.cs" />
+    <Compile Include="Media\Audio.cs" />
+    <Compile Include="Transmissions\FileChat.cs" />
+    <Compile Include="Models\FilePiece.cs" />
+    <Compile Include="Models\FramePieceInfo.cs" />
+    <Compile Include="Transmissions\GroupChat.cs" />
+    <Compile Include="Transmissions\GroupMulticast.cs" />
+    <Compile Include="Models\Message.cs" />
+    <Compile Include="Transmissions\ScreenCast.cs" />
     <Compile Include="ScreenCastWindow.xaml.cs">
       <DependentUpon>ScreenCastWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Screenshot.cs" />
-    <Compile Include="WebCamCast.cs" />
-    <Compile Include="WebCamScreenShot.cs" />
+    <Compile Include="Media\Screenshot.cs" />
+    <Compile Include="Transmissions\WebCamCast.cs" />
+    <Compile Include="Media\WebCam.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

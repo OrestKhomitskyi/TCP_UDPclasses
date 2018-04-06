@@ -18,7 +18,7 @@ namespace ZoomFake_TCP_
         public GroupChat(IPAddress IpAddress)
         {
             Client = new UdpClient(new IPEndPoint(IpAddress, PortChat));
-            //Client.JoinMulticastGroup(GroupIp);
+            Client.JoinMulticastGroup(GroupIp);
             cancellationToken = new CancellationTokenSource();
         }
 

@@ -20,7 +20,7 @@ namespace ZoomFake_TCP_
         public FileChat(IPAddress IpAddress)
         {
             Client = new UdpClient(new IPEndPoint(IpAddress, this.PortFileChat));
-            //Client.JoinMulticastGroup(GroupIp);
+            Client.JoinMulticastGroup(GroupIp);
             cancellationTokenSource = new CancellationTokenSource();
         }
         public void StopChatting()

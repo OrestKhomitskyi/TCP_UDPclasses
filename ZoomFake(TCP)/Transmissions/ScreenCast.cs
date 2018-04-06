@@ -12,7 +12,7 @@ using ZoomFake;
 
 namespace ZoomFake_TCP_
 {
-    public class WebCamCast : GroupMulticast
+    public class ScreenCast : GroupMulticast
     {
         private readonly UdpClient Client;
         public event Action<ImageBrush> OnFrameChange;
@@ -22,11 +22,11 @@ namespace ZoomFake_TCP_
         protected CancellationTokenSource cancellationTokenSource;
 
 
-        public WebCamCast(IPAddress IpAddress)
+        public ScreenCast(IPAddress IpAddress)
         {
-            EndPointGroup = new IPEndPoint(GroupIp, PortWebCamCast);
-            Client = new UdpClient(new IPEndPoint(IpAddress, PortWebCamCast));
-            //Client.JoinMulticastGroup(GroupIp);
+            EndPointGroup = new IPEndPoint(GroupIp, PortScreenCast);
+            Client = new UdpClient(new IPEndPoint(IpAddress, PortScreenCast));
+            Client.JoinMulticastGroup(GroupIp);
             cancellationTokenSource = new CancellationTokenSource();
         }
 
@@ -63,49 +63,47 @@ namespace ZoomFake_TCP_
             await SendingTask;
         }
 
-        private void Send()
+        protected virtual void Send()
         {
-            using (WebCam webCam = new WebCam())
+            while (!cancellationTokenSource.IsCancellationRequested)
             {
-                while (!cancellationTokenSource.IsCancellationRequested)
+                try
                 {
-                    try
+                    byte[] screenshotBytes = Screenshot.BitMapImageScreen;
+                    //byte[] screenshotBytes = Screenshot.GetVideoCaptureBytes();
+                    Guid id = Guid.NewGuid();
+
+                    MemoryStream ms = new MemoryStream();
+                    BinaryFormatter bf = new BinaryFormatter();
+
+                    using (var inputMs = new MemoryStream(screenshotBytes))
+                    using (BinaryReader br = new BinaryReader(inputMs))
                     {
-                        byte[] screenshotBytes = webCam.GetVideoCaptureBytes();
-                        Guid id = Guid.NewGuid();
+                        FramePieceInfo fi =
+                            new FramePieceInfo(br.ReadBytes(64000), id) { TotalLength = screenshotBytes.Length };
 
-                        MemoryStream ms = new MemoryStream();
-                        BinaryFormatter bf = new BinaryFormatter();
-
-                        using (var inputMs = new MemoryStream(screenshotBytes))
-                        using (BinaryReader br = new BinaryReader(inputMs))
+                        bf.Serialize(ms, fi);
+                        //Thread.Sleep(15);
+                        while (fi.FrameBytes.Length > 0)
                         {
-                            FramePieceInfo fi =
-                                new FramePieceInfo(br.ReadBytes(64000), id) { TotalLength = screenshotBytes.Length };
-
+                            Client.Send(ms.GetBuffer(), (int)ms.Length, EndPointGroup);
+                            ms = new MemoryStream();
+                            fi.FrameBytes = br.ReadBytes(64000);
                             bf.Serialize(ms, fi);
-                            //Thread.Sleep(15);
-                            while (fi.FrameBytes.Length > 0)
-                            {
-                                Client.Send(ms.GetBuffer(), (int)ms.Length, EndPointGroup);
-                                ms = new MemoryStream();
-                                fi.FrameBytes = br.ReadBytes(64000);
-                                bf.Serialize(ms, fi);
-                                Thread.Sleep(15);
-                            }
+                            Thread.Sleep(15);
                         }
+                    }
 
-                        Debug.WriteLine($"Sent: {screenshotBytes.Length}");
-                        Thread.Sleep(10);
-                    }
-                    catch (ObjectDisposedException oex)
-                    {
+                    Debug.WriteLine($"Sent: {screenshotBytes.Length}");
+                    Thread.Sleep(10);
+                }
+                catch (ObjectDisposedException oex)
+                {
 
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
                 }
             }
         }
@@ -143,8 +141,8 @@ namespace ZoomFake_TCP_
                     }
                     else
                     {
+                        CheckForHit(CurrentPieceInfo);
                         CurrentPieceInfo = new FramePieceInfo(fpi.FrameBytes, fpi.Id) { TotalLength = fpi.TotalLength };
-                        continue;
                     }
                     CheckForHit(CurrentPieceInfo);
                     Debug.WriteLine("Buffer: " + CurrentPieceInfo?.FrameBytes.Length);
@@ -170,6 +168,7 @@ namespace ZoomFake_TCP_
                     try
                     {
                         OnFrameChange(new ImageBrush(Screenshot.ByteToBitMapSource(CurrentPieceInfo.FrameBytes)));
+                        //OnFrameChange(new ImageBrush(Screenshot.GetVideoCaptureBytes(CurrentPieceInfo.FrameBytes)));
                     }
                     catch (Exception ex)
                     {
@@ -178,5 +177,6 @@ namespace ZoomFake_TCP_
                 });
             }
         }
+
     }
 }
