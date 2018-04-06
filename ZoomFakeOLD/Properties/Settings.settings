@@ -1,0 +1,21 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ZoomFake.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="GroupAddress" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">240.6.7.8</Value>
+    </Setting>
+    <Setting Name="PortChat" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">1111</Value>
+    </Setting>
+    <Setting Name="PortFileChat" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">4444</Value>
+    </Setting>
+    <Setting Name="PortScreenCast" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">3333</Value>
+    </Setting>
+    <Setting Name="MyIp" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">192.168.190.70</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
