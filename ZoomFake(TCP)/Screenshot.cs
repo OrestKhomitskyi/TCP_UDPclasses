@@ -1,6 +1,4 @@
-﻿using Emgu.CV;
-using System;
-using System.Diagnostics;
+﻿using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -34,27 +32,6 @@ namespace ZoomFake
                 }
             }
         }
-
-        private static VideoCapture vc = new VideoCapture();
-        public static byte[] GetVideoCaptureBytes()
-        {
-            try
-            {
-                Mat mat = new Mat();
-                vc.Retrieve(mat);
-                ImageConverter converter = new ImageConverter();
-                Bitmap bp = mat.Bitmap;
-
-                byte[] data = (byte[])converter.ConvertTo(bp, typeof(byte[]));
-                return data;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("ERRRRRR");
-            }
-            return null;
-        }
-
 
         private static void Vc_ImageGrabbed(object sender, EventArgs e)
         {

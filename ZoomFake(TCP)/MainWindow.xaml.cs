@@ -16,9 +16,12 @@ namespace ZoomFake_TCP_
     {
         public bool IsConnected { get; set; }
         private bool IsScreenCasting = false;
+        private bool IsWebCamCasting = false;
+
         private GroupChat GroupChat;
         private FileChat FileChat;
         private ScreenCast ScreenCast;
+        private WebCamCast WebCamCast;
 
 
         public MainWindow()
@@ -64,10 +67,6 @@ namespace ZoomFake_TCP_
             ScreenCast?.Stop();
         }
 
-        private void ScreenCast_OnFrameChange(System.Windows.Media.ImageBrush obj)
-        {
-            throw new NotImplementedException();
-        }
 
         private void FileChat_OnMessage(Message obj)
         {
@@ -123,7 +122,63 @@ namespace ZoomFake_TCP_
             }
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        private void ShareWebCam_OnClick(object Sender, RoutedEventArgs E)
+        {
+            IsWebCamCasting = !IsWebCamCasting;
+            WebCamCast?.Stop();
+
+            if (IsWebCamCasting)
+            {
+                WebCamCast = new WebCamCast(IPAddress.Parse(Ip.Text));
+                WebCamCast.SendAsync();
+                ShareWebCam.Content = "Stop";
+                ReceiveWebCam.IsEnabled = false;
+            }
+            else
+            {
+                ShareWebCam.Content = "Share";
+                ReceiveWebCam.IsEnabled = true;
+            }
+        }
+
+
+        private void ReceiveWebCam_OnClick(object Sender, RoutedEventArgs E)
+        {
+            WebCamCast?.Stop();
+            WebCamCast = new WebCamCast(IPAddress.Parse(Ip.Text));
+            ScreenCastWindow scw = new ScreenCastWindow();
+
+            WebCamCast.OnFrameChange += (s) =>
+            {
+                scw.Dispatcher.Invoke(() =>
+                {
+                    scw.ScreenCast_OnFrameChange(s);
+                });
+            };
+            scw.Show();
+            WebCamCast.ReceiveAsync();
+        }
+
+        private void ShareScreen_OnClick(object Sender, RoutedEventArgs E)
+        {
+            IsScreenCasting = !IsScreenCasting;
+            ScreenCast?.Stop();
+
+            if (IsScreenCasting)
+            {
+                ScreenCast = new ScreenCast(IPAddress.Parse(Ip.Text));
+                ScreenCast.SendAsync();
+                ShareScreen.Content = "Stop";
+                ReceiveScreen.IsEnabled = false;
+            }
+            else
+            {
+                ShareScreen.Content = "Share";
+                ReceiveScreen.IsEnabled = true;
+            }
+        }
+
+        private void ReceiveScreen_OnClick(object Sender, RoutedEventArgs E)
         {
             ScreenCast?.Stop();
             ScreenCast = new ScreenCast(IPAddress.Parse(Ip.Text));
@@ -139,25 +194,5 @@ namespace ZoomFake_TCP_
             scw.Show();
             ScreenCast.ReceiveAsync();
         }
-
-        private void Button_Click_3(object sender, RoutedEventArgs e)
-        {
-            IsScreenCasting = !IsScreenCasting;
-            ScreenCast?.Stop();
-
-            if (IsScreenCasting)
-            {
-                ScreenCast = new ScreenCast(IPAddress.Parse(Ip.Text));
-                ScreenCast.SendAsync();
-                SendButton.Content = "Stop";
-                ReceiveButton.IsEnabled = false;
-            }
-            else
-            {
-                SendButton.Content = "Share";
-                ReceiveButton.IsEnabled = true;
-            }
-        }
-
     }
 }
