@@ -19,6 +19,11 @@ namespace ZoomFake_TCP_
         public GroupChat(IPAddress IpAddress)
         {
             Client = new UdpClient(new IPEndPoint(IpAddress, PortChat));
+            ////Client.ExclusiveAddressUse = false;
+            //Client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+            //Client.ExclusiveAddressUse = false;
+            //Client.Client.Bind(new IPEndPoint(IpAddress, PortChat));
+
             Client.JoinMulticastGroup(GroupIp);
             cancellationToken = new CancellationTokenSource();
         }
@@ -29,29 +34,28 @@ namespace ZoomFake_TCP_
             Client.Close();
         }
 
-        private void Receive()
+        private async void Receive()
         {
-            IPEndPoint remote = null;
             while (!cancellationToken.IsCancellationRequested)
             {
                 try
                 {
-                    byte[] data = Client.Receive(ref remote);
-                    Debug.WriteLine(remote.Port);
-                    Debug.WriteLine(remote.AddressFamily.ToString());
+                    UdpReceiveResult result = await Client.ReceiveAsync();
+                    byte[] data = result.Buffer;
+
                     if (data.Length > 0)
                     {
                         Message message = new Message()
                         {
-                            Address = remote.Address,
+                            Address = result.RemoteEndPoint.Address,
                             Data = Encoding.UTF8.GetString(data)
                         };
                         OnMessage(message);
                     }
                 }
-                catch (SocketException ex)
+                catch (ObjectDisposedException ode)
                 {
-
+                    Debug.WriteLine("Group Chat Socket closed");
                 }
                 catch (Exception ex)
                 {

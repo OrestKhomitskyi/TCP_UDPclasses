@@ -30,16 +30,15 @@ namespace ZoomFake_TCP_
             Client.Close();
         }
 
-        private void Receive()
+        private async void Receive()
         {
             BinaryFormatter bf = new BinaryFormatter();
-            IPEndPoint remote = null;
             while (!cancellationTokenSource.IsCancellationRequested)
             {
                 try
                 {
-                    byte[] data = Client.Receive(ref remote);
-                    using (var inputMemoryStream = new MemoryStream(data))
+                    UdpReceiveResult result = await Client.ReceiveAsync();
+                    using (var inputMemoryStream = new MemoryStream(result.Buffer))
                     {
                         FilePiece deserialized = bf.Deserialize(inputMemoryStream) as FilePiece;
 
@@ -47,7 +46,7 @@ namespace ZoomFake_TCP_
                         {
                             Message message = new Message()
                             {
-                                Address = remote.Address,
+                                Address = result.RemoteEndPoint.Address,
                                 Data = $"File: {deserialized.FileInfo.Name}"
                             };
                             OnMessage(message);
@@ -58,9 +57,9 @@ namespace ZoomFake_TCP_
                         }
                     }
                 }
-                catch (SocketException ex)
+                catch (ObjectDisposedException)
                 {
-
+                    Debug.WriteLine("FileChat Socket closed");
                 }
                 catch (Exception ex)
                 {
