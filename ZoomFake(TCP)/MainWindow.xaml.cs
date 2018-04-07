@@ -32,6 +32,7 @@ namespace ZoomFake_TCP_
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+
             try
             {
                 if (!IsConnected)

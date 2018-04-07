@@ -1,7 +1,21 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ZoomFake_TCP_.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ipGroup" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">224.5.6.7</Value>
+    </Setting>
+    <Setting Name="portGroupChat" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">3333</Value>
+    </Setting>
+    <Setting Name="portGroupFile" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">3334</Value>
+    </Setting>
+    <Setting Name="portGroupCast" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">3335</Value>
+    </Setting>
+    <Setting Name="portGroupWebCam" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">3336</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>

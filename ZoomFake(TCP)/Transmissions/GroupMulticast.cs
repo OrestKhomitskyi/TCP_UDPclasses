@@ -1,15 +1,15 @@
-﻿using System.Configuration;
-using System.Net;
+﻿using System.Net;
+using ZoomFake_TCP_.Properties;
 
 namespace ZoomFake_TCP_
 {
     public abstract class GroupMulticast
     {
-        protected IPAddress GroupIp = IPAddress.Parse(ConfigurationManager.AppSettings.Get("ipGroup").ToString());
-        protected int PortChat = int.Parse(ConfigurationManager.AppSettings.Get("portGroupChat").ToString());
-        protected int PortFileChat = int.Parse(ConfigurationManager.AppSettings.Get("portGroupFile").ToString());
-        protected int PortScreenCast = int.Parse(ConfigurationManager.AppSettings.Get("portGroupCast").ToString());
-        protected int PortWebCamCast = int.Parse(ConfigurationManager.AppSettings.Get("portGroupWebCam").ToString());
+        protected IPAddress GroupIp = IPAddress.Parse(Settings.Default.ipGroup);
+        protected int PortChat = Settings.Default.portGroupChat;
+        protected int PortFileChat = Settings.Default.portGroupFile;
+        protected int PortScreenCast = Settings.Default.portGroupCast;
+        protected int PortWebCamCast = Settings.Default.portGroupWebCam;
 
     }
 }
