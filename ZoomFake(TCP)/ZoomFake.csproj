@@ -65,6 +65,10 @@
     <Reference Include="NAudio, Version=1.8.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NAudio.1.8.4\lib\net35\NAudio.dll</HintPath>
     </Reference>
+    <Reference Include="NSpeex, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\NSpeex.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
@@ -93,7 +97,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Media\Audio.cs" />
+    <Compile Include="Transmissions\AudioChat.cs" />
+    <Compile Include="Media\Audio\Codec\AcmChatCodec.cs" />
+    <Compile Include="Media\Audio\Codec\ALawChatCodec.cs" />
+    <Compile Include="Media\Audio\IAudioReceiver.cs" />
+    <Compile Include="Media\Audio\IAudioSender.cs" />
+    <Compile Include="Media\Audio\NetworkAudioPlayer.cs" />
+    <Compile Include="Media\Audio\NetworkAudioSender.cs" />
+    <Compile Include="Media\Audio\Codec\INetworkChatCodec.cs" />
+    <Compile Include="Media\Audio\Codec\SpeexChatCodec.cs" />
+    <Compile Include="Media\UdpAudioReceiver.cs" />
+    <Compile Include="Media\UdpAudioSender.cs" />
     <Compile Include="Transmissions\FileChat.cs" />
     <Compile Include="Models\FilePiece.cs" />
     <Compile Include="Models\FramePieceInfo.cs" />
@@ -160,6 +174,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\Debug\Download\" />
+    <Folder Include="bin\Debug\Sounds\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">

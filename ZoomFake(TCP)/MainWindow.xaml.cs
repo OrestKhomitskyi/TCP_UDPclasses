@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ZoomFake_TCP_.Media;
 using ZoomFake_TCP_.Properties;
 
 namespace ZoomFake_TCP_
@@ -23,7 +24,7 @@ namespace ZoomFake_TCP_
         private FileChat FileChat;
         private ScreenCast ScreenCast;
         private WebCamCast WebCamCast;
-
+        private AudioChat AudioChat;
 
         public MainWindow()
         {
@@ -39,6 +40,7 @@ namespace ZoomFake_TCP_
             {
                 if (!IsConnected)
                 {
+                    AudioChat = new AudioChat(IPAddress.Parse(Ip.Text));
                     GroupChat = new GroupChat(IPAddress.Parse(Ip.Text));
                     FileChat = new FileChat(IPAddress.Parse(Ip.Text));
 
@@ -64,9 +66,9 @@ namespace ZoomFake_TCP_
 
         private void CloseConnection()
         {
-            GroupChat.StopChat();
-            FileChat.StopChatting();
-
+            GroupChat?.StopChat();
+            FileChat?.StopChatting();
+            AudioChat?.Stop();
             ScreenCast?.Stop();
         }
 
@@ -133,21 +135,22 @@ namespace ZoomFake_TCP_
             if (IsWebCamCasting)
             {
                 WebCamCast = new WebCamCast(IPAddress.Parse(Ip.Text));
+                AudioChat.Start();
                 WebCamCast.SendAsync();
                 ShareWebCam.Content = "Stop";
                 ReceiveWebCam.IsEnabled = false;
             }
             else
             {
+                AudioChat.Stop();
                 ShareWebCam.Content = "Share WebCam";
                 ReceiveWebCam.IsEnabled = true;
             }
         }
-
-
         private void ReceiveWebCam_OnClick(object Sender, RoutedEventArgs E)
         {
             WebCamCast?.Stop();
+            AudioChat.Start();
             WebCamCast = new WebCamCast(IPAddress.Parse(Ip.Text));
             ScreenCastWindow scw = new ScreenCastWindow();
 
@@ -158,8 +161,15 @@ namespace ZoomFake_TCP_
                     scw.ScreenCast_OnFrameChange(s);
                 });
             };
+            scw.Closed += Scw_Closed;
             scw.Show();
             WebCamCast.ReceiveAsync();
+        }
+
+        private void Scw_Closed(object sender, EventArgs e)
+        {
+            AudioChat?.Stop();
+            WebCamCast?.Stop();
         }
 
         private void ShareScreen_OnClick(object Sender, RoutedEventArgs E)

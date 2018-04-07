@@ -20,5 +20,8 @@
     <Setting Name="localIp" Type="System.String" Scope="Application">
       <Value Profile="(Default)">192.168.0.61</Value>
     </Setting>
+    <Setting Name="portGroupAudio" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">3337</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -21,7 +21,6 @@ namespace ZoomFake_TCP_
         protected IPEndPoint EndPointGroup;
         protected CancellationTokenSource cancellationTokenSource;
 
-
         public ScreenCast(IPAddress IpAddress)
         {
             EndPointGroup = new IPEndPoint(GroupIp, PortScreenCast);
@@ -29,9 +28,6 @@ namespace ZoomFake_TCP_
             Client.JoinMulticastGroup(GroupIp);
             cancellationTokenSource = new CancellationTokenSource();
         }
-
-
-
 
         private byte[] AddImagePiece(byte[] currentdata, byte[] newdata)
         {
@@ -42,13 +38,11 @@ namespace ZoomFake_TCP_
             return current;
         }
 
-
         public void Stop()
         {
             cancellationTokenSource.Cancel();
             Client.Close();
         }
-
 
         public async void ReceiveAsync()
         {

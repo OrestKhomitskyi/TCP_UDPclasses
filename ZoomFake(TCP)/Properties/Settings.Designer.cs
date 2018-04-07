@@ -76,5 +76,17 @@ namespace ZoomFake_TCP_.Properties {
                 return ((string)(this["localIp"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3337")]
+        public int portGroupAudio {
+            get {
+                return ((int)(this["portGroupAudio"]));
+            }
+            set {
+                this["portGroupAudio"] = value;
+            }
+        }
     }
 }
