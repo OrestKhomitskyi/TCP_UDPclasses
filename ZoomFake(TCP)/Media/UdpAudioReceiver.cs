@@ -18,7 +18,7 @@ namespace ZoomFake_TCP_.Media
             var endPoint = new IPEndPoint(IpAddress, Settings.Default.portGroupAudio);
 
             udpListener = new UdpClient();
-            udpListener.JoinMulticastGroup(IPAddress.Parse(Settings.Default.ipGroup));
+            //udpListener.JoinMulticastGroup(IPAddress.Parse(Settings.Default.ipGroup));
 
             // To allow us to talk to ourselves for test purposes:
             // http://stackoverflow.com/questions/687868/sending-and-receiving-udp-packets-between-two-programs-on-the-same-computer

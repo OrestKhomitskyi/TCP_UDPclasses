@@ -11,27 +11,28 @@ namespace ZoomFake_TCP_
 {
     class GroupChat : GroupMulticast
     {
-        private readonly UdpClient Client;
+        private readonly UdpClient ClientReceive;
+        private readonly UdpClient ClientSend;
+
         public event Action<Message> OnMessage;
         private CancellationTokenSource cancellationToken;
 
 
         public GroupChat(IPAddress IpAddress)
         {
-            Client = new UdpClient(new IPEndPoint(IpAddress, PortChat));
-            ////Client.ExclusiveAddressUse = false;
-            //Client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-            //Client.ExclusiveAddressUse = false;
-            //Client.Client.Bind(new IPEndPoint(IpAddress, PortChat));
-
-            Client.JoinMulticastGroup(GroupIp);
+            ClientReceive = new UdpClient(new IPEndPoint(IpAddress, PortChat));
+            ClientReceive.JoinMulticastGroup(GroupIp);
+            ClientSend = new UdpClient();
+            ClientSend.JoinMulticastGroup(GroupIp);
+            ClientSend.Connect(new IPEndPoint(GroupIp, PortChat));
             cancellationToken = new CancellationTokenSource();
         }
 
         public void StopChat()
         {
             cancellationToken.Cancel();
-            Client.Close();
+            ClientSend.Close();
+            ClientReceive.Close();
         }
 
         private async void Receive()
@@ -40,7 +41,7 @@ namespace ZoomFake_TCP_
             {
                 try
                 {
-                    UdpReceiveResult result = await Client.ReceiveAsync();
+                    UdpReceiveResult result = await ClientReceive.ReceiveAsync();
                     byte[] data = result.Buffer;
 
                     if (data.Length > 0)
@@ -72,7 +73,7 @@ namespace ZoomFake_TCP_
         {
             try
             {
-                Client.Send(Data, Data.Length, new IPEndPoint(GroupIp, PortChat));
+                ClientSend.Send(Data, Data.Length);
             }
             catch (Exception ex)
             {
