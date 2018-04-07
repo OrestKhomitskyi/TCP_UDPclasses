@@ -22,13 +22,13 @@ namespace ZoomFake_TCP_.Media
         private void Receive()
         {
             AudioReceiver = new UdpAudioReceiver(IpAddress);
-            NetworkAudioPlayer = new NetworkAudioPlayer(new NarrowBandSpeexCodec(), AudioReceiver);
+            NetworkAudioPlayer = new NetworkAudioPlayer(new ALawChatCodec(), AudioReceiver);
         }
 
         private void Send()
         {
             AudioSender = new UdpAudioSender(IpAddress);
-            NetworkAudioSender = new NetworkAudioSender(new NarrowBandSpeexCodec(), 0, AudioSender);
+            NetworkAudioSender = new NetworkAudioSender(new ALawChatCodec(), 0, AudioSender);
         }
 
         public void Start()

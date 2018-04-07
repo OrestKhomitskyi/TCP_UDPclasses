@@ -65,14 +65,28 @@
     <Reference Include="NAudio, Version=1.8.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NAudio.1.8.4\lib\net35\NAudio.dll</HintPath>
     </Reference>
-    <Reference Include="NSpeex, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\NSpeex.dll</HintPath>
+    <Reference Include="NSpeex.Reactive">
+      <HintPath>..\packages\NSpeex.Reactive.0.0.1\lib\net4\NSpeex.Reactive.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-Core.2.2.5\lib\net45\System.Reactive.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-Interfaces.2.2.5\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Linq">
+      <HintPath>..\packages\Rx-Linq.2.2.5\lib\net45\System.Reactive.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.PlatformServices">
+      <HintPath>..\packages\Rx-PlatformServices.2.2.5\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
@@ -105,7 +119,6 @@
     <Compile Include="Media\Audio\NetworkAudioPlayer.cs" />
     <Compile Include="Media\Audio\NetworkAudioSender.cs" />
     <Compile Include="Media\Audio\Codec\INetworkChatCodec.cs" />
-    <Compile Include="Media\Audio\Codec\SpeexChatCodec.cs" />
     <Compile Include="Media\UdpAudioReceiver.cs" />
     <Compile Include="Media\UdpAudioSender.cs" />
     <Compile Include="Transmissions\FileChat.cs" />
@@ -169,6 +182,7 @@
   <ItemGroup>
     <Content Include="bin\Debug\ZoomFake%28TCP%29.exe" />
     <Content Include="bin\Debug\ZoomFake%28TCP%29.pdb" />
+    <Resource Include="NSpeex_LICENSE.txt" />
     <Resource Include="Custom-Icon-Design-Mono-Business-2-Coffee.ico" />
     <Resource Include="License-LGPL.txt" />
   </ItemGroup>
