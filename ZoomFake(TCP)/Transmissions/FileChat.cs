@@ -12,22 +12,31 @@ namespace ZoomFake_TCP_
 {
     class FileChat : GroupMulticast
     {
-        private readonly UdpClient Client;
+        private readonly UdpClient ClientSend;
+        private readonly UdpClient ClientReceive;
+
         public event Action<Message> OnMessage;
         private CancellationTokenSource cancellationTokenSource;
 
 
         public FileChat(IPAddress IpAddress)
         {
-            Client = new UdpClient(new IPEndPoint(IpAddress, this.PortFileChat));
-            Client.JoinMulticastGroup(GroupIp);
-            Client.MulticastLoopback = false;
+
+            ClientReceive = new UdpClient(new IPEndPoint(IPAddress.Any, PortFileChat));
+            ClientReceive.JoinMulticastGroup(GroupIp);
+            ClientReceive.MulticastLoopback = false;
+
+            ClientSend = new UdpClient();
+            ClientSend.JoinMulticastGroup(GroupIp);
+            ClientSend.Connect(new IPEndPoint(GroupIp, PortFileChat));
+
             cancellationTokenSource = new CancellationTokenSource();
         }
         public void StopChatting()
         {
             cancellationTokenSource.Cancel();
-            Client.Close();
+            ClientSend.Close();
+            ClientReceive.Close();
         }
 
         private async void Receive()
@@ -37,7 +46,7 @@ namespace ZoomFake_TCP_
             {
                 try
                 {
-                    UdpReceiveResult result = await Client.ReceiveAsync();
+                    UdpReceiveResult result = await ClientReceive.ReceiveAsync();
                     using (var inputMemoryStream = new MemoryStream(result.Buffer))
                     {
                         FilePiece deserialized = bf.Deserialize(inputMemoryStream) as FilePiece;
@@ -108,7 +117,7 @@ namespace ZoomFake_TCP_
 
                     while (data.Length > 0)
                     {
-                        Client.Send(ms.GetBuffer(), (int)ms.Length, GroupEndPoint);
+                        ClientSend.Send(ms.GetBuffer(), (int)ms.Length, GroupEndPoint);
                         data = br.ReadBytes(1024);
                         fp.Data = data;
                         ms = new MemoryStream();
@@ -119,7 +128,7 @@ namespace ZoomFake_TCP_
                     ms = new MemoryStream();
                     fp.Data = new byte[] { 1, 2, 3 };
                     binaryFormatter.Serialize(ms, fp);
-                    Client.Send(ms.GetBuffer(), (int)ms.Length, GroupEndPoint);
+                    ClientSend.Send(ms.GetBuffer(), (int)ms.Length, GroupEndPoint);
                 }
             });
         }

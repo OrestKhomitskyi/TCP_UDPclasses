@@ -14,7 +14,10 @@ namespace ZoomFake_TCP_
 {
     public class WebCamCast : GroupMulticast
     {
-        private readonly UdpClient Client;
+        private readonly UdpClient ClientSend;
+        private readonly UdpClient ClientReceive;
+
+
         public event Action<ImageBrush> OnFrameChange;
         protected Task ReceivingTask;
         protected Task SendingTask;
@@ -25,9 +28,14 @@ namespace ZoomFake_TCP_
         public WebCamCast(IPAddress IpAddress)
         {
             EndPointGroup = new IPEndPoint(GroupIp, PortWebCamCast);
-            Client = new UdpClient(new IPEndPoint(IpAddress, PortWebCamCast));
-            Client.JoinMulticastGroup(GroupIp);
+            ClientReceive = new UdpClient(new IPEndPoint(IPAddress.Any, PortWebCamCast));
+            ClientReceive.JoinMulticastGroup(GroupIp);
+
+            ClientSend = new UdpClient();
+            ClientSend.JoinMulticastGroup(GroupIp);
+            ClientSend.Connect(EndPointGroup);
             cancellationTokenSource = new CancellationTokenSource();
+
         }
 
 
@@ -46,7 +54,8 @@ namespace ZoomFake_TCP_
         public void Stop()
         {
             cancellationTokenSource.Cancel();
-            Client.Close();
+            ClientReceive.Close();
+            ClientSend.Close();
         }
 
 
@@ -87,7 +96,7 @@ namespace ZoomFake_TCP_
                             //Thread.Sleep(15);
                             while (fi.FrameBytes.Length > 0)
                             {
-                                Client.Send(ms.GetBuffer(), (int)ms.Length, EndPointGroup);
+                                ClientSend.Send(ms.GetBuffer(), (int)ms.Length);
                                 ms = new MemoryStream();
                                 fi.FrameBytes = br.ReadBytes(64000);
                                 bf.Serialize(ms, fi);
@@ -121,7 +130,7 @@ namespace ZoomFake_TCP_
             {
                 try
                 {
-                    byte[] data = Client.Receive(ref ip);
+                    byte[] data = ClientReceive.Receive(ref ip);
                     using (MemoryStream ms = new MemoryStream(data))
                     {
                         fpi = bf.Deserialize(ms) as FramePieceInfo;

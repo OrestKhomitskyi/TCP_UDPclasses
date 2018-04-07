@@ -15,29 +15,31 @@ namespace ZoomFake_TCP_
         private readonly UdpClient ClientSend;
 
         public event Action<Message> OnMessage;
-        private CancellationTokenSource cancellationToken;
+        private CancellationTokenSource cancellationTokenSource;
 
 
         public GroupChat(IPAddress IpAddress)
         {
-            ClientReceive = new UdpClient(new IPEndPoint(IpAddress, PortChat));
+            ClientReceive = new UdpClient(new IPEndPoint(IPAddress.Any, PortChat));
             ClientReceive.JoinMulticastGroup(GroupIp);
+
             ClientSend = new UdpClient();
             ClientSend.JoinMulticastGroup(GroupIp);
             ClientSend.Connect(new IPEndPoint(GroupIp, PortChat));
-            cancellationToken = new CancellationTokenSource();
+
+            cancellationTokenSource = new CancellationTokenSource();
         }
 
         public void StopChat()
         {
-            cancellationToken.Cancel();
+            cancellationTokenSource.Cancel();
             ClientSend.Close();
             ClientReceive.Close();
         }
 
         private async void Receive()
         {
-            while (!cancellationToken.IsCancellationRequested)
+            while (!cancellationTokenSource.IsCancellationRequested)
             {
                 try
                 {
@@ -66,7 +68,7 @@ namespace ZoomFake_TCP_
         }
         public async void ReceiveAsync()
         {
-            await Task.Factory.StartNew(Receive, cancellationToken.Token);
+            await Task.Factory.StartNew(Receive, cancellationTokenSource.Token);
         }
 
         public void Send(byte[] Data)
