@@ -111,6 +111,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Transmissions\GroupMulticast.cs" />
     <Compile Include="Transmissions\AudioChat.cs" />
     <Compile Include="Media\Audio\Codec\AcmChatCodec.cs" />
     <Compile Include="Media\Audio\Codec\ALawChatCodec.cs" />
@@ -125,7 +126,6 @@
     <Compile Include="Models\FilePiece.cs" />
     <Compile Include="Models\FramePieceInfo.cs" />
     <Compile Include="Transmissions\GroupChat.cs" />
-    <Compile Include="Transmissions\GroupMulticast.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Transmissions\ScreenCast.cs" />
     <Compile Include="ScreenCastWindow.xaml.cs">

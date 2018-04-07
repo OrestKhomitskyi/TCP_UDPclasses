@@ -14,8 +14,7 @@ namespace ZoomFake_TCP_.Media
         public UdpAudioSender(IPAddress IpAddress)
         {
             udpSender = new UdpClient();
-            udpSender.MulticastLoopback = false;
-            //udpSender.JoinMulticastGroup(IPAddress.Parse(Settings.Default.ipGroup));
+            udpSender.JoinMulticastGroup(IPAddress.Parse(Settings.Default.ipGroup));
             udpSender.Connect(Settings.Default.ipGroup, Settings.Default.portGroupAudio);
         }
 

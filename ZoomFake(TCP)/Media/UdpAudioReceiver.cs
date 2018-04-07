@@ -15,17 +15,16 @@ namespace ZoomFake_TCP_.Media
 
         public UdpAudioReceiver(IPAddress IpAddress)
         {
-            var endPoint = new IPEndPoint(IpAddress, Settings.Default.portGroupAudio);
 
-            udpListener = new UdpClient();
-            //udpListener.JoinMulticastGroup(IPAddress.Parse(Settings.Default.ipGroup));
+            udpListener = new UdpClient(new IPEndPoint(IPAddress.Any, Settings.Default.portGroupAudio));
+            udpListener.JoinMulticastGroup(IPAddress.Parse(Settings.Default.ipGroup));
+            udpListener.MulticastLoopback = false;
 
             // To allow us to talk to ourselves for test purposes:
             // http://stackoverflow.com/questions/687868/sending-and-receiving-udp-packets-between-two-programs-on-the-same-computer
             //udpListener.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-            udpListener.Client.Bind(endPoint);
 
-            ThreadPool.QueueUserWorkItem(ListenerThread, endPoint);
+            ThreadPool.QueueUserWorkItem(ListenerThread, null);
             listening = true;
         }
 
