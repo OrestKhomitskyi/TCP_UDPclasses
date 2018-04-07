@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -36,7 +37,8 @@ namespace ZoomFake_TCP_
                 try
                 {
                     byte[] data = Client.Receive(ref remote);
-
+                    Debug.WriteLine(remote.Port);
+                    Debug.WriteLine(remote.AddressFamily.ToString());
                     if (data.Length > 0)
                     {
                         Message message = new Message()

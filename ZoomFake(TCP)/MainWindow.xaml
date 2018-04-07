@@ -17,8 +17,8 @@
         <GroupBox Header="Options" FontSize="15pt" Grid.Column="0">
             <StackPanel>
                 <Label>Ip</Label>
-                <TextBox x:Name="Ip">192.168.0.61</TextBox>
-                
+                <TextBox x:Name="Ip" Text=""/>
+
                 <Button Click="Button_Click" Margin="0 20">Connect</Button>
                 <Grid IsEnabled="False" x:Name="ScreenCastGrid">
                     <Grid.ColumnDefinitions>

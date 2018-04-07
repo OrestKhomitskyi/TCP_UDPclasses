@@ -21,6 +21,7 @@ namespace ZoomFake_TCP_
         {
             Client = new UdpClient(new IPEndPoint(IpAddress, this.PortFileChat));
             Client.JoinMulticastGroup(GroupIp);
+            Client.MulticastLoopback = false;
             cancellationTokenSource = new CancellationTokenSource();
         }
         public void StopChatting()

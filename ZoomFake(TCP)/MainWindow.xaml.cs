@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ZoomFake_TCP_.Properties;
 
 namespace ZoomFake_TCP_
 {
@@ -28,6 +29,7 @@ namespace ZoomFake_TCP_
         {
             InitializeComponent();
             IsConnected = false;
+            Ip.Text = Settings.Default.localIp;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

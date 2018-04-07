@@ -67,5 +67,14 @@ namespace ZoomFake_TCP_.Properties {
                 return ((int)(this["portGroupWebCam"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("192.168.0.61")]
+        public string localIp {
+            get {
+                return ((string)(this["localIp"]));
+            }
+        }
     }
 }
